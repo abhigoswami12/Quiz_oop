@@ -60,11 +60,11 @@ button {
   color: rgb(240, 238, 238);
   background-color: none;
   padding: 0.9rem 1.5rem;
-  border-radius: 0;
+  /* border-radius: 0; */
   border: 0;
   font-size: 36px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 4px;
   outline: 0;
   cursor: pointer;
   
@@ -309,4 +309,79 @@ tfoot {
 }
 .good {
   color: rgb(223, 223, 22);
+}
+
+
+@media screen and (max-width:768px) {
+  html {
+    font-size: 10px;
+  }
+  .restart-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* order: 2; */
+    /* width: 100%; */
+    /* display: block; */
+
+  }
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: none;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+  /* .table-wrapper {
+  max-width: auto;
+  margin: 0 auto;
+} */
+ th,
+td {
+  padding: 1rem 1rem;
+  /* font-weight: 400; */
+}
+thead {
+  background: #21396A;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+tbody tr:nth-child(even), tfoot tr:first-child {
+  background: #f0f0f2;
+}
+td {
+  border-bottom: 1px solid #cecfd5;
+  border-right: 1px solid #cecfd5;
+}
+td:first-child {
+  border-left: 1px solid #cecfd5;
+  font-weight: 500;
+  width: 29rem;
+  /* padding-right: 17rem; */
+  /* word-spacing: 0.02rem; */
+}
+
+.restart {
+  margin-left: 0;;
+
+}
+
+.result-text {
+  order: 1;
+}
+.next-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+.btn {
+  order: 1;
+}
+.error{
+  margin-bottom: -0.5rem;
+}
+
 }
