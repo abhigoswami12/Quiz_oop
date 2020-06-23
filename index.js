@@ -15,11 +15,15 @@ class Question {
         return this.options[this.correctAnswerIndex];
     }
     createUI(index,questions) {
+        if(index !== 1) {
+            note.style.display = "none";
+        }
+
         return `
         <div>
             <div class="progress-bar">
                 <p>Question: ${index}/${questions.length} </p>
-                <progress  max="100" value=${100 / questions.length}></progress>
+                <progress max="100" value=${(100 / questions.length)*index}></progress>
             </div>
         <form>
         <legend>${this.title}</legend>
@@ -121,9 +125,7 @@ let note = document.querySelector(".note")
 let counterCorrect = 0;
 let counterWrong = 0;
 let sst = localStorage.getItem("storeSst") ? JSON.parse(localStorage.getItem("storeSst")) : [];
-
-console.log(sst)
-
+const NEGATIVE_MARKS = 0.5;
 
 class Quiz {
     constructor(rootElm, nextElm, questions) {
@@ -136,7 +138,6 @@ class Quiz {
         this.score = localStorage.getItem("score") ? JSON.parse(localStorage.getItem("score")) : 0;
     }
     nextQuestion(activeQuestionIndex, userSelectedAns) {
-        note.style.display = "none";
         errorMsg.innerText = "";
         userSelectedAns = userSelectedAns;
         this.updateTableSst(userSelectedAns);
@@ -144,20 +145,16 @@ class Quiz {
         localStorage.setItem("quiz", JSON.stringify(this.activeQuestionIndex))
         if (this.activeQuestionIndex >= this.questions.length) {
             this.displayResult();
-           
             return;
         }
         this.rootElm.innerHTML = this.questions[
           this.activeQuestionIndex
         ].createUI(this.activeQuestionIndex + 1, this.questions);
-        let progress = document.querySelector("progress")
-        progress.value = progress.value * (this.activeQuestionIndex+1);
 
         window.addEventListener("load", instantiatefn);
     }
 
     updateTableSst(userSelectedAns) {
-        console.log("userSelectedAns", userSelectedAns);
         let tableContent = {
             title: this.questions[this.activeQuestionIndex].title,
             correctAnswer: this.questions[this.activeQuestionIndex].getCorrectAnswer(),
@@ -165,8 +162,6 @@ class Quiz {
         }
         sst.push(tableContent);
         localStorage.setItem("storeSst", JSON.stringify(sst))
-        console.log(sst);
-
     }
 
     createTableUI(data=sst, root=tbody) {
@@ -195,17 +190,12 @@ class Quiz {
             tr.append(td1, td2, td3, td4);
             totalCorrect.innerText = `${counterCorrect}`;
             totalWrong.innerText = `${counterWrong}`
-
         })
-
     }
 
-
     displayResult() {
-
         table.style.display = "block";
         this.createTableUI();
-
         this.rootElm.style.display = "none";
         this.nextElm.style.display = "none";
         displayScore.innerText = `Score: ${this.score}`;
@@ -226,6 +216,7 @@ class Quiz {
         restartBtn.addEventListener("click", restartFn)
         localStorage.clear();
     }
+
     rootUI(negativeMarks = 0) {
         this.rootElm.style.display = "block";
         this.nextElm.style.display = "block";
@@ -251,7 +242,6 @@ class Quiz {
             this.nextQuestion(this.activeQuestionIndex, selectedInput[0].value)
         });
         
-        console.log(this.activeQuestionIndex)
         this.rootElm.innerHTML = this.questions[
           this.activeQuestionIndex
         ].createUI(this.activeQuestionIndex + 1, this.questions);
@@ -263,18 +253,18 @@ class Quiz {
     }
 }
 
-let quiz = new Quiz(root, nextBtn, questionsArrMapped);
-    quiz.rootUI(0.5); 
 
-    function restartFn() {
-        note.style.display = "block";
-        let quiz = new Quiz(root, nextBtn, questionsArrMapped);
-        quiz.rootUI(0.5); 
-        sst =[];
-        
-    }
+
+let quiz = new Quiz(root, nextBtn, questionsArrMapped);
+    quiz.rootUI(NEGATIVE_MARKS); 
+
+function restartFn() {
+    instantiatefn()
+    sst =[];
+}
+
 function instantiatefn() {
     let quiz = new Quiz(root, nextBtn, questionsArrMapped);
-    quiz.rootUI(0.25);
+    quiz.rootUI(NEGATIVE_MARKS);
 }
     
