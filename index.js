@@ -260,6 +260,7 @@ let quiz = new Quiz(root, nextBtn, questionsArrMapped);
 
 function restartFn() {
     instantiatefn()
+    note.style.display = "block";
     sst =[];
 }
 
